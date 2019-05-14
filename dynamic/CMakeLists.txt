@@ -3,4 +3,4 @@ project(untitled)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(untitled summy.cpp)
+add_executable(untitled kopilka2.cpp)
