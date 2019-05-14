@@ -4,13 +4,12 @@
 
 #include <iostream>
 #include <vector>
-#include <unordered_set>
+#include<numeric>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::vector;
-using std::unordered_set;
 
 int main(){
 
@@ -24,16 +23,22 @@ int main(){
         numbers.push_back(number);
     }
 
-    unordered_set<int> sum;
-    sum.insert(0);
-    for (const auto &number : numbers) {
-        unordered_set<int> tmp_sum;
-        for (const auto &item : sum) {
-            tmp_sum.insert(item+number);
-        }
-        sum.insert(tmp_sum.begin(), tmp_sum.end());
+    int max_sum = std::accumulate(numbers.begin(),numbers.end(),0);
+
+    int sum_number[max_sum+1];
+
+    for (int sum_i = 0; sum_i <= max_sum; ++sum_i) {
+        sum_number[sum_i] = 0;
     }
 
-    cout << sum.size();
+    for (int sum_i = 0; sum_i <= max_sum; ++sum_i) {
+        for (const auto &number : numbers) {
+            if (number < sum_i)
+                continue;
+            if (sum_number[sum_i - number] == 0)
+                continue;
+        }
+    }
+
     return 0;
 }
