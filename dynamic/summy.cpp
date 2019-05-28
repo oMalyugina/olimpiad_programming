@@ -11,7 +11,7 @@ using std::cout;
 using std::endl;
 using std::vector;
 
-int main(){
+int main() {
 
     int N;
     cin >> N;
@@ -23,22 +23,38 @@ int main(){
         numbers.push_back(number);
     }
 
-    int max_sum = std::accumulate(numbers.begin(),numbers.end(),0);
+    int max_sum = std::accumulate(numbers.begin(), numbers.end(), 0);
 
-    int sum_number[max_sum+1];
+    int sum[max_sum + 1];
 
     for (int sum_i = 0; sum_i <= max_sum; ++sum_i) {
-        sum_number[sum_i] = 0;
+        sum[sum_i] = 0;
     }
+    sum[0] = 1;
 
-    for (int sum_i = 0; sum_i <= max_sum; ++sum_i) {
-        for (const auto &number : numbers) {
-            if (number < sum_i)
+    for (const auto &number : numbers) {
+        int sum_prev[max_sum + 1];
+        for (int sum_i = 0; sum_i <= max_sum; ++sum_i) {
+            sum_prev[sum_i] = sum[sum_i];
+        }
+        for (int sum_i = 0; sum_i <= max_sum; ++sum_i) {
+            if (sum_prev[sum_i] == 1) {
                 continue;
-            if (sum_number[sum_i - number] == 0)
-                continue;
+            }
+            if (sum_i >= number) {
+                if (sum_prev[sum_i - number] == 1) {
+                    sum[sum_i] = 1;
+                }
+            }
         }
     }
+
+    int result = 0;
+    for (int i = 0; i < max_sum + 1; ++i) {
+        result += sum[i];
+    }
+
+    cout << result;
 
     return 0;
 }
