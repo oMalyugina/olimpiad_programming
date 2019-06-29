@@ -8,30 +8,28 @@ using std::cin;
 #include <vector>
 using std::vector;
 
+int n, m;
+
 
 void dfs(vector<vector<bool>> &field, int i, int j){
-	auto n = field.size();
-	auto m = field[0].size();
-	if (i > 0 and field[i-1][j] == false){
-		field[i-1][j] = true;
+	field[i][j] = true;
+	if (i > 0 && field[i-1][j] == false){
 		dfs(field, i-1, j);
 	}
-	if (j > 0 and field[i][j-1] == false){
-		field[i][j-1] = true;
+	if (j > 0 && field[i][j-1] == false){
 		dfs(field, i, j-1);
 	}
-	if (i < n-1 and field[i+1][j] == false){
-		field[i+1][j] = true;
+	if (i < n-1 && field[i+1][j] == false){
 		dfs(field, i+1, j);
 	}
-	if (i < m-1 and field[i][j+1] == false){
-		field[i][j+1] = true;
+	if (j < m-1 && field[i][j+1] == false){
 		dfs(field, i, j+1);
 	}
 }
 
+
 int main(){
-	int n,m;
+//	int /n,m;
 	cin >> n >> m;
 	vector<vector<bool >> field;
 	for (int i = 0; i < n; ++i) {
@@ -48,6 +46,7 @@ int main(){
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < m; ++j) {
 			if (field[i][j] == false) {
+//				field[i][j] = true;
 				++step;
 				dfs(field, i, j);
 			}
