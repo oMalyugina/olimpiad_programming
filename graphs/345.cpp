@@ -11,21 +11,22 @@
 using namespace std;
 
 
-bool dfs(vector<int> &seen, vector<vector<bool>> &edges, int cur, vector<int> &res) {
+bool dfs(vector<int> &seen, vector<vector<bool>> &edges, int cur, vector<int> &local_res, int start) {
 	seen[cur] = 1;
 	for (int i = 0; i < edges.size(); ++i) {
 		if (edges[cur][i] == false) continue;
-		if (seen[i] == 1) {
-			res.push_back(cur);
+		if (seen[i] == 1 and i == start) {
+			local_res.push_back(cur);
 			return true;
 		}
-		if (seen[i] == 2) return false;
-		if (dfs(seen, edges, i, res)) {
-			res.push_back(cur);
+		if (seen[i] != 0) continue;
+		if (dfs(seen, edges, i, local_res, start)) {
+			local_res.push_back(cur);
 			return true;
 		}
 	}
 	seen[cur] = 2;
+	return false;
 }
 
 int main() {
@@ -33,7 +34,6 @@ int main() {
 	cin >> n;
 	vector<vector<bool>> edges(n, vector<bool>(n, false));
 	unordered_map<string, int> name2index;
-	unordered_map<int, string> index2name;
 	vector<string> names;
 	for (int progpam = 0; progpam < n; ++progpam) {
 		string name;
@@ -42,7 +42,6 @@ int main() {
 		if (name2index.find(name) == name2index.end()) {
 			int index = name2index.size();
 			name2index[name] = index;
-			index2name[index] = name;
 		}
 		int from = name2index[name];
 		int number_calls;
@@ -53,7 +52,6 @@ int main() {
 			if (name2index.find(prog_call) == name2index.end()) {
 				int index = name2index.size();
 				name2index[prog_call] = index;
-				index2name[index] = prog_call;
 			}
 			int to = name2index[prog_call];
 			edges[from][to] = true;
@@ -65,9 +63,9 @@ int main() {
 	for (auto obj: name2index) {
 		if (res[obj.second] == true) continue;
 		vector<int> for_dfs(n, 0);
-		vector<int> res;
-		dfs(for_dfs, edges, obj.second, res);
-		for (auto point_in_circle  : res) {
+		vector<int> local_res;
+		dfs(for_dfs, edges, obj.second, local_res, obj.second);
+		for (auto point_in_circle  : local_res) {
 			res[point_in_circle] = true;
 
 		}
