@@ -14,16 +14,17 @@ struct Point {
 	Point(int x_ = 0, int y_ = 0) : x(x_), y(y_) {}
 };
 
+
 int main() {
 	int m, n;
-	cin >> m >> n;
-	int field[m][n];
-	int obstacle = 5000000;
+	cin >> n >> m;
+	int field[n][m];
+	int obstacle = -1;
 	Point tiger_pose;
 	Point start = Point(1, 1);
-	Point finish = Point(m - 2, n - 2);
-	for (int j = 0; j < m; ++j) {
-		for (int k = 0; k < n; ++k) {
+	Point finish = Point(n - 2, m - 2);
+	for (int j = 0; j < n; ++j) {
+		for (int k = 0; k < m; ++k) {
 			char cell;
 			cin >> cell;
 			if (cell == '#') field[j][k] = obstacle;
@@ -37,12 +38,13 @@ int main() {
 	}
 	queue<Point> to_see;
 	to_see.push(start);
+	field[start.x][start.y] = 1;
 	while (not to_see.empty() and field[finish.x][finish.y] == 0) {
 
 		Point cur = to_see.front();
 		to_see.pop();
 
-		if (cur.x < m - 1 and field[cur.x + 1][cur.y] == 0) {
+		if (cur.x < n - 1 and field[cur.x + 1][cur.y] == 0) {
 			field[cur.x + 1][cur.y] = field[cur.x][cur.y] + 1;
 			to_see.push(Point(cur.x + 1, cur.y));
 		}
@@ -50,7 +52,7 @@ int main() {
 			field[cur.x - 1][cur.y] = field[cur.x][cur.y] + 1;
 			to_see.push(Point(cur.x - 1, cur.y));
 		}
-		if (cur.y < n - 1 and field[cur.x][cur.y + 1] == 0) {
+		if (cur.y < m - 1 and field[cur.x][cur.y + 1] == 0) {
 			field[cur.x][cur.y + 1] = field[cur.x][cur.y] + 1;
 			to_see.push(Point(cur.x, cur.y + 1));
 		}
@@ -60,42 +62,62 @@ int main() {
 		}
 
 	}
-	cout << field[finish.x][finish.y] << endl;
+	int shortest_path = field[finish.x][finish.y] - 1;
+	cout << shortest_path << endl;
+
+//	cout << "man step"  << endl;
+//	for (int i = 0; i < n; ++i) {
+//		for (int j = 0; j < m; ++j) {
+//			cout << field[i][j] << " ";
+//		}
+//		cout << endl;
+//	}
+
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			if (field[i][j] >= 0) field[i][j] = 0;
+		}
+	}
 
 	queue<Point> tiger_step;
 	tiger_step.push(tiger_pose);
-	field[tiger_pose.x][tiger_pose.y] = 0;
+	field[tiger_pose.x][tiger_pose.y] = 1;
 
 	while (not tiger_step.empty()) {
 		Point tiger = tiger_step.front();
 		tiger_step.pop();
 
-		if (tiger.x < m - 1 and field[tiger.x + 1][tiger.y] != obstacle and
-		    field[tiger.x + 1][tiger.y] + (field[tiger.x][tiger.y] - 1) >= 0) {
-			field[tiger.x + 1][tiger.y] = field[tiger.x][tiger.y] - 1;
+		if (tiger.x < n - 1 and field[tiger.x + 1][tiger.y] == 0) {
+			field[tiger.x + 1][tiger.y] = field[tiger.x][tiger.y] +1 ;
 			tiger_step.push(Point(tiger.x + 1, tiger.y));
 		}
-		if (tiger.x > 0 and field[tiger.x - 1][tiger.y] != obstacle and
-		    field[tiger.x - 1][tiger.y] + (field[tiger.x][tiger.y] - 1) >= 0) {
-			field[tiger.x - 1][tiger.y] = field[tiger.x][tiger.y] - 1;
+		if (tiger.x > 0 and field[tiger.x - 1][tiger.y] == 0) {
+			field[tiger.x - 1][tiger.y] = field[tiger.x][tiger.y] + 1;
 			tiger_step.push(Point(tiger.x - 1, tiger.y));
 		}
-		if (tiger.y < n - 1 and field[tiger.x][tiger.y + 1] != obstacle and
-		    field[tiger.x][tiger.y + 1] + (field[tiger.x][tiger.y] - 1) >= 0) {
-			field[tiger.x][tiger.y + 1] = field[tiger.x][tiger.y] - 1;
+		if (tiger.y < m - 1 and field[tiger.x][tiger.y + 1] == 0) {
+			field[tiger.x][tiger.y + 1] = field[tiger.x][tiger.y] + 1;
 			tiger_step.push(Point(tiger.x, tiger.y + 1));
 		}
-		if (tiger.y > 0 and field[tiger.x][tiger.y - 1] != obstacle and
-		    field[tiger.x][tiger.y - 1] + (field[tiger.x][tiger.y] - 1) >= 0) {
-			field[tiger.x][tiger.y - 1] = field[tiger.x][tiger.y] - 1;
+		if (tiger.y > 0 and field[tiger.x][tiger.y - 1] == 0) {
+			field[tiger.x][tiger.y - 1] = field[tiger.x][tiger.y] + 1;
 			tiger_step.push(Point(tiger.x, tiger.y - 1));
 		}
 	}
 
-	if (field[finish.x][finish.y] > 0) cout << "Yes";
-	else cout << "No";
+//	cout << "tiger step"  << endl;
+//	for (int i = 0; i < n; ++i) {
+//		for (int j = 0; j < m; ++j) {
+//			cout << field[i][j] << " ";
+//		}
+//		cout << endl;
+//	}
+
+	if (field[finish.x][finish.y] != 0  and field[finish.x][finish.y] -1 <= shortest_path ) cout << "No";
+	else cout << "Yes";
 
 	return 0;
 
 }
+
 
