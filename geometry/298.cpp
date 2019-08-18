@@ -12,23 +12,27 @@ struct Point{
     int x;
     int y;
     float tg;
-    bool upDown;
+    int virtel;
 
     Point(int x_=0, int y_=0): x(x_), y(y_){
         if (y == 0) tg = 200;
         else tg = x*1./y;
-        upDown = x>=0;
+        if (x >= 0 and y >= 0) virtel = 1;
+        else if (x < 0 and y >= 0) virtel = 2;
+        else if (x < 0 and y < 0) virtel = 3;
+        else if (x >= 0 and y < 0) virtel = 4;
+        else virtel = 0;
     }
 };
 
 bool operator!=(Point first, Point second){
     if (first.tg != second.tg) return true;
-    return first.upDown != second.upDown;
+    return first.virtel != second.virtel;
 }
 
 bool operator<(Point first, Point second){
-    if (first.upDown == second.upDown) return first.tg < second.tg;
-    return first.upDown;
+    if (first.virtel == second.virtel) return first.tg < second.tg;
+    return first.virtel < second.virtel;
 }
 
 int main(){
