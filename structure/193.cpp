@@ -13,6 +13,7 @@ public:
     int rigth;
     int bottom;
     int up;
+
     Rectangle() = default;
 
     Rectangle(int x, int y) {
@@ -34,22 +35,33 @@ int main() {
     int n, m, k;
     cin >> n >> m >> k;
     map<int, Rectangle> rectangles;
+    int number_not_null = 0;
     for (int y = 0; y < n; ++y) {
         for (int x = 0; x < m; ++x) {
             int number;
             cin >> number;
+            if (number != 0) ++number_not_null;
             if (rectangles.find(number) == rectangles.end()) {
-                rectangles[number] = {x,y};
+                rectangles[number] = {x, y};
             } else
                 rectangles[number].update(x, y);
         }
     }
-    for (int i = 1; i < k + 1; ++i) {
-        if (rectangles.find(i) == rectangles.end())
-            continue;
-        cout << rectangles[i].left << " " << n - rectangles[i].up << " " << rectangles[i].rigth << " "
-             << n - rectangles[i].bottom;
-        cout << endl;
+    if (number_not_null == 1) {
+        int number = 0;
+        for (auto rect: rectangles) {
+            if (rect.first != 0)
+                number = rect.first;
+        }
+        for (int i = 1; i < k + 1; ++i) {
+            cout << rectangles[number].left << " " << n - rectangles[number].up << " " << rectangles[number].rigth
+                 << " " << n - rectangles[number].bottom << endl;
+        }
+    } else {
+        for (int i = 1; i < k + 1; ++i) {
+            cout << rectangles[i].left << " " << n - rectangles[i].up << " " << rectangles[i].rigth << " "
+                 << n - rectangles[i].bottom << endl;
+        }
     }
     return 0;
 }
