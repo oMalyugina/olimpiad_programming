@@ -1,4 +1,8 @@
 //
+// Created by Olga Malyugina on 17.04.20.
+//
+
+//
 // Created by olga on 24.01.20.
 //
 
@@ -51,19 +55,17 @@ void print_matrix(const vector<vector<T>>& matrix){
 
 
 int main() {
-    int N, M, K;
-    cin >> N >> M >> K;
+    int N, M;
+    cin >> N >> M;
     vector<vector<bool>> map(N, vector<bool>(M, false));
     vector<vector<int>> hres(N, vector<int>(M+1, 0));
     vector<vector<int>> max_squared(N, vector<int>(M+1, 0));
 
-    for (int i = 0; i < K; ++i) {
-        int vFirst, hFirst, vLast, hLast;
-        cin >> vFirst >> hFirst >> vLast >> hLast;
-        for (int x = max(vFirst-2, 0); x <= min(vLast, N-1); ++x) {
-            for (int y = max(hFirst-2,0); y <= min(hLast, M-1); ++y) {
-                map[x][y] = true;
-            }
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < M; ++j) {
+            char tmp;
+            cin >> tmp;
+            map[i][j] = tmp == '0';
         }
     }
 
