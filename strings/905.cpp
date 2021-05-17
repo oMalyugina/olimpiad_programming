@@ -49,12 +49,10 @@ int main(){
         input.push_back(line);
         if (decoded)
             continue;
-        for (int j = 0; j < 25 and !decoded; ++j) {
-            if (!compare(line, pattern))
-                continue;
-            if (get_clue(line, pattern, clue))
-                decoded = true;
-        }
+        if (!compare(line, pattern))
+            continue;
+        if (get_clue(line, pattern, clue))
+            decoded = true;
 
     }
     if (!decoded){
